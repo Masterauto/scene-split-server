@@ -3,10 +3,6 @@ import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "🎉 Server is running!", 200
-
 @app.route('/split', methods=['POST'])
 def split_video():
     data = request.get_json()
@@ -15,10 +11,13 @@ def split_video():
     if not video_id:
         return jsonify({"error": "Missing video_id"}), 400
 
-    # Gọi lệnh python để xử lý chia scene (chạy file main.py)
-    os.system(f'python3 main.py "{video_id}"')
+    # 🧠 Tải video từ YouTube bằng yt-dlp
+    os.system(f'yt-dlp -f best -o input.mp4 https://www.youtube.com/watch?v={video_id}')
 
-    return jsonify({"message": f"✅ Đã nhận video_id: {video_id} và xử lý chia scene!"})
+    # 🎬 Chạy script chia scene
+    os.system('python3 scene_split_v2.py')
+
+    return jsonify({"message": f"✅ Đã tải và xử lý video_id: {video_id}!"})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
