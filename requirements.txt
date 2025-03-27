@@ -1,4 +1,1 @@
 flask
-moviepy
-scenedetect
-yt-dlp
