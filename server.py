@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import os
 
 app = Flask(__name__)
@@ -22,7 +22,6 @@ def split_video():
     for video_id in video_ids:
         print(f"[PROCESSING] 🎬 Đang xử lý video_id: {video_id}")
 
-        # Gọi lệnh xử lý
         try:
             exit_code = os.system(f'python3 main.py "{video_id}"')
             if exit_code == 0:
@@ -50,7 +49,6 @@ def split_video():
         "message": "✅ Hoàn tất xử lý tất cả video",
         "results": results
     }), 200
-from flask import send_file
 
 @app.route('/download/<video_id>', methods=['GET'])
 def download_video(video_id):
