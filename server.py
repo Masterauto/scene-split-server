@@ -7,13 +7,13 @@ app = Flask(__name__)
 def home():
     return '🎉 Server is running!', 200
 
-@app.route('/split', methods=['POST'])
-def split_video():
-    data = request.get_json()
-    
-    video_ids = data.get("video_ids")
-    if not video_ids or not isinstance(video_ids, list):
-        return jsonify({"error": "Missing or invalid 'video_ids' (expecting list)"}), 400
+@app.route('/download/<video_id>', methods=['GET'])
+def download_video(video_id):
+    video_path = os.path.join("output", f"{video_id}.mp4")
+    if os.path.exists(video_path):
+        return send_file(video_path, as_attachment=True)
+    else:
+        return jsonify({"error": f"Không tìm thấy file cho video_id: {video_id}"}), 404
 
     print(f"[INFO] Nhận {len(video_ids)} video_id để xử lý...")
 
