@@ -5,21 +5,21 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Server is running!", 200
+    return "🎉 Server is running!", 200
 
 @app.route('/split', methods=['POST'])
-def split_video():
+def split_videos():
     data = request.get_json()
-    video_ids = data.get("video_ids")  # Lấy danh sách video_ids từ yêu cầu
+    video_ids = data.get("video_ids")
 
     if not video_ids:
         return jsonify({"error": "Missing video_ids"}), 400
 
-    # Chạy lệnh python3 để xử lý tất cả video trong danh sách video_ids
+    # ✅ Gửi từng video_id vào xử lý scene
     for video_id in video_ids:
-        os.system(f'python3 main.py {video_id}')  # Gọi lệnh xử lý video
+        os.system(f'python3 main.py "{video_id}"')
 
-    return jsonify({"message": f"Đã nhận và xử lý các video: {', '.join(video_ids)}!"})
+    return jsonify({"message": f"✅ Đã nhận {len(video_ids)} video_id và xử lý scene!"})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
